@@ -12,11 +12,16 @@ namespace OqoSim.Gui {
     
     
     public partial class MainMenu {
-        
+
         public MainMenu() {
             InitializeComponent();
 
             exitButton.Clicked += () =>
+            {
+                Application.RequestStop();
+            };
+
+            generateCharacterButton.Clicked += () =>
             {
                 Application.RequestStop();
             };

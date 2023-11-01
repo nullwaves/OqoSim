@@ -8,11 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Terminal.Gui" Version="1.14.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Gui\" />
+    <Reference Include="oqocs">
+      <HintPath>..\..\..\repos\oqocs\oqocs\bin\Debug\netstandard2.0\oqocs.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
