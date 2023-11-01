@@ -1,4 +1,5 @@
 ﻿using OqoSim.Game;
+using System.Text.RegularExpressions;
 
 namespace OqoSim.Gui
 {
@@ -40,6 +41,15 @@ namespace OqoSim.Gui
                 for (int x = x0; x < x0+width; x++)
                 {
                     slice[line] += _game.World.TileIsCovered(x,y,_game.CurrentLayer) ? "^" : GetGlyph(layer.Tiles[x, y]);
+                }
+                var inclines = Regex.Matches(slice[line], "\\^{3,}");
+                if (inclines is not null)
+                {
+                    foreach (Match incline in inclines.OrderByDescending(x => x.Length))
+                    {
+                        var newPart = $"^{new String(' ', incline.Length-2)}^";
+                        slice[line] = slice[line].Replace(incline.Value, newPart);
+                    }
                 }
                 line++;
             }
