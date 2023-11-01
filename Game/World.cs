@@ -35,7 +35,7 @@
                     }
                     else if (elevation > 0)
                     {
-                        elevation /= 4;
+                        //elevation /= 3;
                         for (int z = 0; z <= elevation; z++)
                             GetTileAtPos(x, y, z).Type = TileType.Ground;
                     }
@@ -44,7 +44,8 @@
         }
 
         public Tile GetTileAtPos(int x, int y, int z) => Layers[z].Tiles[x, y];
-
-        public bool TileIsCovered(int x, int y, int z) => Layers[z + 1].Tiles[x, y].Type != TileType.Air;
+        public Tile GetTileAbove(int x, int y, int z) => GetTileAtPos(x, y, z + 1);
+        public bool TileIsCovered(int x, int y, int z) => GetTileAbove(x,y,z).Type == TileType.Ground;
+        public bool TileIsSubmerged(int x, int y, int z) => GetTileAbove(x,y,z).Type == TileType.Water;
     }
 }

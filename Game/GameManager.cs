@@ -71,9 +71,9 @@ namespace OqoSim.Game
                         else Camera.Move(0, 1);
                     }
                     else if (key.Key == ConsoleKey.A)
-                        Camera.Move(-1, 0);
+                        Camera.Move(-2, 0);
                     else if (key.Key == ConsoleKey.D)
-                        Camera.Move(1, 0);
+                        Camera.Move(2, 0);
                     else if (key.Key == ConsoleKey.Q)
                         MoveZ(1);
                     else if (key.Key == ConsoleKey.E)

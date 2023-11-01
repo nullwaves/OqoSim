@@ -5,6 +5,9 @@ namespace OqoSim.Gui
     internal class Camera
     {
         private Layer _currentLayer;
+
+        private string[] _lastScreen = new string[0];
+
         public int Height { get; private set; }
         public int Width { get; private set; }
 
@@ -51,10 +54,14 @@ namespace OqoSim.Gui
 
         public void Draw()
         {
-            Console.Clear();
             var screen = RenderScreen();
-            foreach (var line in screen)
-                Console.WriteLine(line);
+            if (!_lastScreen.SequenceEqual(screen))
+            {
+                _lastScreen = screen;
+                Console.Clear();
+                foreach (var line in screen)
+                    Console.WriteLine(line);
+            }
         }
 
         public void Resize(int height, int width)

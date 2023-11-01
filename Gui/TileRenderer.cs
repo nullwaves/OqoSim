@@ -5,11 +5,20 @@ namespace OqoSim.Gui
 {
     internal class TileRenderer
     {
+        static string NORMAL = Console.IsOutputRedirected ? "" : "\x1b[39m";
+        static string RED = Console.IsOutputRedirected ? "" : "\x1b[91m";
+        static string GREEN = Console.IsOutputRedirected ? "" : "\x1b[92m";
+        static string YELLOW = Console.IsOutputRedirected ? "" : "\x1b[93m";
+        static string BLUE = Console.IsOutputRedirected ? "" : "\x1b[94m";
+        static string MAGENTA = Console.IsOutputRedirected ? "" : "\x1b[95m";
+        static string CYAN = Console.IsOutputRedirected ? "" : "\x1b[96m";
+        static string GREY = Console.IsOutputRedirected ? "" : "\x1b[97m";
+
         public static Dictionary<TileType, string> TileGlyphs = new Dictionary<TileType, string>()
         {
             { TileType.Air, " " },
             { TileType.Ground, "_" },
-            { TileType.Water, "~" },
+            { TileType.Water, CYAN + "~" },
         };
 
         private static GameManager _game;
@@ -27,7 +36,12 @@ namespace OqoSim.Gui
 
         public string GetGlyph(Tile tile)
         {
-            return TileGlyphs[tile.Type];
+            return TileGlyphs[tile.Type] + NORMAL;
+        }
+
+        public string GetGlyph(TileType type)
+        {
+            return TileGlyphs[type] + NORMAL;
         }
 
         public string[] Render(Layer layer, int x0 = 0, int y0 = 0, int height = 0, int width = 0)
@@ -40,7 +54,8 @@ namespace OqoSim.Gui
             {
                 for (int x = x0; x < x0+width; x++)
                 {
-                    slice[line] += _game.World.TileIsCovered(x,y,_game.CurrentLayer) ? "^" : GetGlyph(layer.Tiles[x, y]);
+                    slice[line] += _game.World.TileIsCovered(x,y,_game.CurrentLayer) ? "^" :
+                        _game.World.TileIsSubmerged(x,y,_game.CurrentLayer) ? GetGlyph(TileType.Water) : GetGlyph(layer.Tiles[x, y]);
                 }
                 var inclines = Regex.Matches(slice[line], "\\^{3,}");
                 if (inclines is not null)

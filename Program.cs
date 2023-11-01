@@ -34,7 +34,7 @@ while(true)
     Console.Title = $"Oqo - X:{gm.Camera.X} Y:{gm.Camera.Y} Z:{gm.CurrentLayer}";
     if (Console.BufferHeight-1 != gm.Camera.Height || Console.BufferWidth != gm.Camera.Width)
         gm.Camera.Resize(Console.BufferHeight-1, Console.BufferWidth);
-    Thread.Sleep(100);
+    Thread.Sleep(50);
 }
 
 //for(int i = world.Layers.Keys.Min(); i <=  world.Layers.Keys.Max(); i++)
