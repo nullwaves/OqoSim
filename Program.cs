@@ -7,7 +7,7 @@ using Terminal.Gui;
 //Application.Run<MainMenu>();
 //Application.Shutdown();
 
-World world;
+World? world;
 
 if (!File.Exists("world.oqo"))
 {
@@ -24,7 +24,7 @@ else
 Console.WriteLine("Done.");
 Console.Beep();
 
-GameManager gm = new GameManager(world);
+GameManager gm = new(world);
 var halfPoint = gm.World.Layers[0].Size / 2;
 gm.Camera.SetPosition((halfPoint, halfPoint));
 gm.Start();

@@ -4,9 +4,9 @@ namespace OqoSim.Gui
 {
     internal class Camera
     {
-        private Layer _currentLayer;
+        private Layer? _currentLayer;
 
-        private string[] _lastScreen = new string[0];
+        private string[] _lastScreen = Array.Empty<string>();
 
         public int Height { get; private set; }
         public int Width { get; private set; }
@@ -14,8 +14,6 @@ namespace OqoSim.Gui
         public int X { get; private set; }
         public int Y { get; private set; }
 
-        private int _maxX => _currentLayer.Size - Width - 1;
-        private int _maxY => _currentLayer.Size - Height - 1;
 
         public Camera(int height, int width)
         {
@@ -23,6 +21,16 @@ namespace OqoSim.Gui
             Width = width;
             X = 0;
             Y = 0;
+        }
+
+        public int GetMaxX()
+        {
+            return _currentLayer is not null ? _currentLayer.Size - Width - 1 : 0;
+        }
+
+        public int GetMaxY()
+        {
+            return _currentLayer is not null ? _currentLayer.Size - Height - 1 : 0;
         }
 
         public void SetLayer(Layer layer)
@@ -36,8 +44,8 @@ namespace OqoSim.Gui
             var newY = position.Item2;
             if(newX >= 0 &&
                 newY >= 0 &&
-                newX <= _maxX &&
-                newY <= _maxY)
+                newX <= GetMaxX() &&
+                newY <= GetMaxY())
             {
                 X = newX;
                 Y = newY;
@@ -68,13 +76,15 @@ namespace OqoSim.Gui
         {
             Width = width;
             Height = height;
-            X = X > _maxX ? _maxX : X;
-            Y = Y > _maxY ? _maxY : Y;
+            X = X > GetMaxX() ? GetMaxX() : X;
+            Y = Y > GetMaxY() ? GetMaxY() : Y;
         }
 
         private string[] RenderScreen()
         {
-            return TileRenderer.Instance.Render(_currentLayer, X, Y, Height, Width);
+            return _currentLayer is not null ?
+                TileRenderer.Render(_currentLayer, X, Y, Height, Width) : 
+                new string[] { "Camera not set to a layer. Render Fail."};
         }
     }
 }

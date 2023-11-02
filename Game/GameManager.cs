@@ -5,7 +5,7 @@ namespace OqoSim.Game
 {
     internal class GameManager
     {
-        private Thread inputThread;
+        private readonly Thread inputThread;
 
         public World World { get; private set; }
 
@@ -16,7 +16,7 @@ namespace OqoSim.Game
         public GameManager(World? world) 
         {
             World = world ?? new World();
-            TileRenderer.Instance.AttachGM(this);
+            TileRenderer.AttachGM(this);
             Camera = new Camera(Console.BufferHeight-1, Console.BufferWidth);
             CurrentLayer = 0;
             UpdateCameraLayer();
@@ -74,9 +74,9 @@ namespace OqoSim.Game
                         Camera.Move(-2, 0);
                     else if (key.Key == ConsoleKey.D)
                         Camera.Move(2, 0);
-                    else if (key.Key == ConsoleKey.Q)
-                        MoveZ(1);
                     else if (key.Key == ConsoleKey.E)
+                        MoveZ(1);
+                    else if (key.Key == ConsoleKey.C)
                         MoveZ(-1);
                 }
             }
