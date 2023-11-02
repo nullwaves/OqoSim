@@ -60,10 +60,10 @@ namespace OqoSim.Gui
             SetPosition(newPos);
         }
 
-        public void Draw()
+        public void Draw(bool forceRedraw = false)
         {
             var screen = RenderScreen();
-            if (!_lastScreen.SequenceEqual(screen))
+            if (!_lastScreen.SequenceEqual(screen) || forceRedraw)
             {
                 _lastScreen = screen;
                 Console.Clear();

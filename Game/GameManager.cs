@@ -5,6 +5,8 @@ namespace OqoSim.Game
 {
     internal class GameManager
     {
+        private IGameState gameState;
+
         private readonly Thread inputThread;
 
         public World World { get; private set; }
@@ -20,6 +22,7 @@ namespace OqoSim.Game
             Camera = new Camera(Console.BufferHeight-1, Console.BufferWidth);
             CurrentLayer = 0;
             UpdateCameraLayer();
+            gameState = new DefaultState();
             inputThread = new Thread(new ThreadStart(ListenForInput));
         }
 
@@ -28,10 +31,14 @@ namespace OqoSim.Game
             inputThread.Start();
         }
 
+        public void Update()
+        {
+            gameState.Update(this);
+        }
+
         public void Tick()
         {
-            // Do updates then draw.
-            Camera.Draw();
+            // Do updates
         }
 
         public void MoveZ(int zDelta)
@@ -55,31 +62,14 @@ namespace OqoSim.Game
             {
                 if(Console.KeyAvailable)
                 {
-                    var key = Console.ReadKey(true);
-                    if (key.Key == ConsoleKey.Escape)
-                        break;
-                    else if (key.Key == ConsoleKey.W)
-                        Camera.Move(0, -1);
-                    else if (key.Key == ConsoleKey.S)
-                    {
-                        if (key.Modifiers.HasFlag(ConsoleModifiers.Control))
-                        {
-                            Console.WriteLine("Beginning save...");
-                            File.WriteAllText("world.oqo", JsonConvert.SerializeObject(World));
-                            Console.WriteLine("Saved.");
-                        }
-                        else Camera.Move(0, 1);
-                    }
-                    else if (key.Key == ConsoleKey.A)
-                        Camera.Move(-2, 0);
-                    else if (key.Key == ConsoleKey.D)
-                        Camera.Move(2, 0);
-                    else if (key.Key == ConsoleKey.E)
-                        MoveZ(1);
-                    else if (key.Key == ConsoleKey.C)
-                        MoveZ(-1);
+                    gameState.HandleInput(this, Console.ReadKey(true));
                 }
             }
+        }
+
+        internal void SetState(IGameState state)
+        {
+            gameState = state;
         }
     }
 }

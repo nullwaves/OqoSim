@@ -35,7 +35,7 @@
                     }
                     else if (elevation > 0)
                     {
-                        //elevation /= 3;
+                        elevation /= 3;
                         for (int z = 0; z <= elevation; z++)
                             GetTileAtPos(x, y, z).Type = TileType.Ground;
                     }

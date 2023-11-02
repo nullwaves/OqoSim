@@ -1,8 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Newtonsoft.Json;
 using OqoSim.Game;
-using OqoSim.Gui;
-using Terminal.Gui;
 
 //Application.Run<MainMenu>();
 //Application.Shutdown();
@@ -30,7 +28,7 @@ gm.Camera.SetPosition((halfPoint, halfPoint));
 gm.Start();
 while(true)
 {
-    gm.Tick();
+    gm.Update();
     Console.Title = $"Oqo - X:{gm.Camera.X} Y:{gm.Camera.Y} Z:{gm.CurrentLayer}";
     if (Console.BufferHeight-1 != gm.Camera.Height || Console.BufferWidth != gm.Camera.Width)
         gm.Camera.Resize(Console.BufferHeight-1, Console.BufferWidth);
