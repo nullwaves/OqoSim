@@ -1,6 +1,6 @@
 ﻿namespace OqoSim.Game
 {
-    internal class Layer
+    public class Layer
     {
         public int Size { get; private set; }
         public Tile[,] Tiles { get; set; }

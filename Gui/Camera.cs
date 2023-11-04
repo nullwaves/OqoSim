@@ -2,7 +2,7 @@
 
 namespace OqoSim.Gui
 {
-    internal class Camera
+    public class Camera
     {
         private Layer? _currentLayer;
 

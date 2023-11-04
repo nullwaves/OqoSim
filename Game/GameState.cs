@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using OqoSim.Gui;
 
 namespace OqoSim.Game
 {
@@ -16,7 +17,7 @@ namespace OqoSim.Game
 
         public void Update(GameManager game) 
         {
-            game.Tick();
+            //game.Tick();
             game.Camera.Draw();
         }
 
@@ -44,6 +45,19 @@ namespace OqoSim.Game
                 game.MoveZ(1);
             else if (key.Key == ConsoleKey.C)
                 game.MoveZ(-1);
+            else if (key.Key == ConsoleKey.G)
+            {
+                if (game.Camera.X < game.World.Size && game.Camera.X > -1 &&
+                    game.Camera.Y < game.World.Size && game.Camera.Y > -1)
+                {
+                    Dwarf dwarf = new() { X = game.Camera.X, Y = game.Camera.Y, Z = game.CurrentLayer };
+                    game.World.Actors.Add(dwarf);
+                }
+            }
+            else if (key.Key == ConsoleKey.Q)
+                game.SimulationSpeed++;
+            else if (key.Key == ConsoleKey.Z)
+                game.SimulationSpeed--;
         }
     }
 

@@ -47,6 +47,7 @@ namespace OqoSim.Gui
             var slice = new string[height];
             int line = 0;
             var inclineRegex = "(" + Regex.Escape(InclineGlyph + Colors.NORMAL) + "){3,}";
+            var actors = _game.World.GetActorsOnLayer(_game.CurrentLayer);
             for (int y = y0; y < y0+height; y++)
             {
                 for (int x = x0; x < x0+width; x++)
@@ -58,7 +59,7 @@ namespace OqoSim.Gui
                     else
                     {
                         var glyph = _game.World.TileIsCovered(x, y, _game.CurrentLayer) ? InclineGlyph + Colors.NORMAL :
-                            _game.World.TileIsSubmerged(x, y, _game.CurrentLayer) ? GetGlyph(TileType.Water) : GetGlyph(layer.Tiles[x, y]);
+                            _game.World.TileIsSubmerged(x, y, _game.CurrentLayer) ? GetGlyph(TileType.Water) : actors.Where(a => a.X == x && a.Y == y).Any() ? Colors.RED + "@" + Colors.NORMAL: GetGlyph(layer.Tiles[x, y]);
                         slice[line] += glyph;
                     }
                 }

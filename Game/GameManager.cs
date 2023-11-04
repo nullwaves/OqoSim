@@ -3,11 +3,14 @@ using OqoSim.Gui;
 
 namespace OqoSim.Game
 {
-    internal class GameManager
+    public class GameManager
     {
         private IGameState gameState;
 
         private readonly Thread inputThread;
+        private readonly Thread tickThread;
+
+        public int SimulationSpeed = 1;
 
         public string State => gameState.Name;
 
@@ -16,6 +19,8 @@ namespace OqoSim.Game
         public Camera Camera { get; private set; }
 
         public int CurrentLayer { get; private set; }
+
+        public Random Random { get; private set; } = new Random();
 
         public GameManager(World? world) 
         {
@@ -26,11 +31,13 @@ namespace OqoSim.Game
             UpdateCameraLayer();
             gameState = new DefaultState();
             inputThread = new Thread(new ThreadStart(ListenForInput));
+            tickThread = new Thread(new ThreadStart(Tick));
         }
 
         public void Start()
         {
             inputThread.Start();
+            tickThread.Start();
         }
 
         public void Update()
@@ -40,7 +47,18 @@ namespace OqoSim.Game
 
         public void Tick()
         {
-            // Do updates
+            while (true)
+            {
+                if (SimulationSpeed > 0)
+                {
+                    foreach (var actor in World.Actors)
+                    {
+                        actor.Tick(this);
+                    }
+                    Thread.Sleep(1000 / SimulationSpeed);
+                }
+                else Thread.Sleep(100);
+            }
         }
 
         public void MoveZ(int zDelta)

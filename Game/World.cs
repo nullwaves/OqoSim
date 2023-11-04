@@ -1,8 +1,10 @@
 ﻿namespace OqoSim.Game
 {
-    internal class World
+    public class World
     {
+        public List<IActor> Actors { get; set; }
         public Dictionary<int, Layer> Layers { get; set; }
+        public int Size { get; private set; }
 
         /// <summary>
         /// Instantiate a world with specified size.
@@ -10,7 +12,9 @@
         /// <param name="height">Total number of layers in the world excluding layer 0.</param>
         public World(int height = 50, int width = 200)
         {
+            Size = width;
             var halfHeight = height / 2;
+            Actors = new List<IActor>();
             Layers = new Dictionary<int, Layer>();
             for (int z = -halfHeight; z <= halfHeight; z++)
             {
@@ -47,5 +51,7 @@
         public Tile GetTileAbove(int x, int y, int z) => GetTileAtPos(x, y, z + 1);
         public bool TileIsCovered(int x, int y, int z) => GetTileAbove(x,y,z).Type == TileType.Ground;
         public bool TileIsSubmerged(int x, int y, int z) => GetTileAbove(x,y,z).Type == TileType.Water;
+
+        public List<IActor> GetActorsOnLayer(int z) => Actors.Where(a => a.Z == z).ToList();
     }
 }
