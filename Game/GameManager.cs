@@ -9,6 +9,8 @@ namespace OqoSim.Game
 
         private readonly Thread inputThread;
 
+        public string State => gameState.Name;
+
         public World World { get; private set; }
 
         public Camera Camera { get; private set; }

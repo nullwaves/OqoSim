@@ -51,9 +51,16 @@ namespace OqoSim.Gui
             {
                 for (int x = x0; x < x0+width; x++)
                 {
-                    var glyph = _game.World.TileIsCovered(x, y, _game.CurrentLayer) ? InclineGlyph + Colors.NORMAL :
-                        _game.World.TileIsSubmerged(x, y, _game.CurrentLayer) ? GetGlyph(TileType.Water) : GetGlyph(layer.Tiles[x, y]);
-                    slice[line] += glyph;
+                    if (y < 0 || x < 0 || y >= layer.Size || x >= layer.Size)
+                    {
+                        slice[line] += " ";
+                    }
+                    else
+                    {
+                        var glyph = _game.World.TileIsCovered(x, y, _game.CurrentLayer) ? InclineGlyph + Colors.NORMAL :
+                            _game.World.TileIsSubmerged(x, y, _game.CurrentLayer) ? GetGlyph(TileType.Water) : GetGlyph(layer.Tiles[x, y]);
+                        slice[line] += glyph;
+                    }
                 }
                 var inclines = Regex.Matches(slice[line], inclineRegex);
                 if (inclines is not null)

@@ -29,20 +29,8 @@ gm.Start();
 while(true)
 {
     gm.Update();
-    Console.Title = $"Oqo - X:{gm.Camera.X} Y:{gm.Camera.Y} Z:{gm.CurrentLayer}";
+    Console.Title = $"Oqo - X:{gm.Camera.X} Y:{gm.Camera.Y} Z:{gm.CurrentLayer} - {gm.State}";
     if (Console.BufferHeight-1 != gm.Camera.Height || Console.BufferWidth != gm.Camera.Width)
         gm.Camera.Resize(Console.BufferHeight-1, Console.BufferWidth);
     Thread.Sleep(50);
 }
-
-//for(int i = world.Layers.Keys.Min(); i <=  world.Layers.Keys.Max(); i++)
-//{
-//    var slice = TileRenderer.Instance.Render(world.Layers[i], 0, 0, Console.BufferHeight-2, Console.BufferWidth);
-//    Console.WriteLine($"########## {i.ToString("D3")} ##########");
-//    foreach(var line in slice)
-//    {
-//        Console.WriteLine(line);
-//    }
-//    _ = Console.ReadKey();
-//    Console.WriteLine("############################");
-//}

@@ -53,7 +53,7 @@ namespace OqoSim.Game
         public void Update(GameManager game)
         {
             game.Camera.Draw();
-            Console.WriteLine("PAUSED");
+            //Console.WriteLine("PAUSED");
         }
 
         public void HandleInput(GameManager game,ConsoleKeyInfo key)

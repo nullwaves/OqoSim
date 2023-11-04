@@ -40,18 +40,8 @@ namespace OqoSim.Gui
 
         public void SetPosition((int,int) position)
         {
-            var newX = position.Item1;
-            var newY = position.Item2;
-            if(newX >= 0 &&
-                newY >= 0 &&
-                newX <= GetMaxX() &&
-                newY <= GetMaxY())
-            {
-                X = newX;
-                Y = newY;
-                return;
-            }
-            // throw new IndexOutOfRangeException();
+            X = position.Item1;
+            Y = position.Item2;
         }
 
         public void Move(int xDelta = 0, int yDelta = 0)
