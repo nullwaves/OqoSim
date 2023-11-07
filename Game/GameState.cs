@@ -29,7 +29,9 @@ namespace OqoSim.Game
                 game.Camera.Menu = new Menu()
                 {
                     Title = "Paused",
-                    Items = new List<MenuItem> { new MenuItem() { Title = "Esc - Resume" }, new MenuItem() { Title = "Ctrl+C - Quit" } }
+                    Items = new List<MenuItem> { new MenuItem() { Title = "Esc - Resume" }, new MenuItem() { Title = "Ctrl+C - Quit" } },
+                    Top = game.Camera.Height / 2,
+                    Left = game.Camera.Width/ 2,
                 };
                 game.SetState(new PausedState());
             }
