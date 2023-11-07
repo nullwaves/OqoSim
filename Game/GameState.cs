@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using OqoSim.Gui;
 
 namespace OqoSim.Game
 {
@@ -23,16 +24,30 @@ namespace OqoSim.Game
         public void HandleInput(GameManager game, ConsoleKeyInfo key)
         {
             if (key.Key == ConsoleKey.Escape)
+            {
+                game.SetPaused();
+                game.Camera.Menu = new Menu()
+                {
+                    Title = "Paused",
+                    Items = new List<MenuItem> { new MenuItem() { Title = "Esc - Resume" }, new MenuItem() { Title = "Ctrl+C - Quit" } }
+                };
                 game.SetState(new PausedState());
+            }
             else if (key.Key == ConsoleKey.W)
                 game.Camera.Move(0, -10);
             else if (key.Key == ConsoleKey.S)
             {
                 if (key.Modifiers.HasFlag(ConsoleModifiers.Control))
                 {
+                    game.SetPaused();
                     Console.WriteLine("Beginning save...");
-                    File.WriteAllText("world.oqo", JsonConvert.SerializeObject(game.World));
+                    var settings = new JsonSerializerSettings
+                    {
+                        TypeNameHandling = TypeNameHandling.Objects
+                    };
+                    File.WriteAllText("world.oqo", JsonConvert.SerializeObject(game.World, typeof(World), settings));
                     Console.WriteLine("Saved.");
+                    game.SetPaused(false);
                 }
                 else game.Camera.Move(0, 10);
             }
@@ -73,6 +88,8 @@ namespace OqoSim.Game
         {
             if (key.Key == ConsoleKey.Escape)
             {
+                game.Camera.Menu = null;
+                game.SetPaused(false);
                 game.SetState(new DefaultState());
                 game.Camera.Draw(true);
             }

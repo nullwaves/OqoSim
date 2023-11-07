@@ -8,6 +8,7 @@ namespace OqoSim.Game
 
         private readonly Thread inputThread;
         private readonly Thread tickThread;
+        private bool Paused;
 
         public int SimulationSpeed = 1;
 
@@ -29,6 +30,7 @@ namespace OqoSim.Game
             CurrentLayer = 0;
             UpdateCameraLayer();
             gameState = new DefaultState();
+            Paused = false;
             inputThread = new Thread(new ThreadStart(ListenForInput));
             tickThread = new Thread(new ThreadStart(Tick));
         }
@@ -48,15 +50,18 @@ namespace OqoSim.Game
         {
             while (true)
             {
-                if (SimulationSpeed > 0)
+                if (!Paused)
                 {
-                    foreach (var actor in World.Actors)
+                    if (SimulationSpeed > 0)
                     {
-                        actor.Tick(this);
+                        foreach (var actor in World.Actors)
+                        {
+                            actor.Tick(this);
+                        }
+                        Thread.Sleep(1000 / SimulationSpeed);
                     }
-                    Thread.Sleep(1000 / SimulationSpeed);
+                    else Thread.Sleep(100);
                 }
-                else Thread.Sleep(100);
             }
         }
 
@@ -89,6 +94,11 @@ namespace OqoSim.Game
         internal void SetState(IGameState state)
         {
             gameState = state;
+        }
+
+        internal void SetPaused(bool val = true)
+        {
+            Paused = val;
         }
     }
 }

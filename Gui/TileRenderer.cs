@@ -1,46 +1,7 @@
 ﻿using OqoSim.Game;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace OqoSim.Gui
 {
-    public struct ConsoleScreen
-    {
-        public int Height { get; private set; }
-        public int Width { get; private set; }
-        public string[,] Pixels;
-
-        public ConsoleScreen(int height, int width)
-        {
-            Height = height;
-            Width = width;
-            Pixels = new string[height, width];
-            for (int y = 0; y < height; y++)
-                for (int x = 0; x < width; x++)
-                    Pixels[y, x] = " ";
-        }
-
-        public readonly string[] ToLines()
-        {
-            string[] lines = new string[Height];
-            for (int y = 0; y < Height; y++)
-                for (int x = 0; x < Width; x++)
-                    lines[y] += Pixels[y, x];
-            return lines;
-        }
-
-        public override readonly string ToString()
-        {
-            var lines = ToLines();
-            StringBuilder sb = new();
-            foreach (string line in lines)
-            {
-                sb.Append(line + Environment.NewLine);
-            }
-            return sb.ToString();
-        }
-    }
-
     internal class TileRenderer
     {
 
@@ -98,8 +59,6 @@ namespace OqoSim.Gui
         {
             if (_game is null) throw new NullReferenceException("GameManager not set in TileRenderer");
             var slice = new ConsoleScreen(height, width);
-            //var inclineRegex = "(" + Regex.Escape(InclineGlyph + Colors.NORMAL) + "){3,}";
-            //var actors = _game.World.GetActorsOnLayer(_game.CurrentLayer);
             int cY = 0;
             int cX = 0;
             for (int y = y0; y < y0 + height; y++)
@@ -109,15 +68,6 @@ namespace OqoSim.Gui
                     slice.Pixels[cY, cX] = RenderTileAtPos(x, y, _game.CurrentLayer);
                     cX++;
                 }
-                //var inclines = Regex.Matches(slice[line], inclineRegex);
-                //if (inclines is not null)
-                //{
-                //    foreach (Match incline in inclines.OrderByDescending(x => x.Length))
-                //    {
-                //        var newPart = $"{InclineGlyph}{new String(' ', (incline.Length/(InclineGlyph.Length+Colors.NORMAL.Length))-2)}{InclineGlyph + Colors.NORMAL}";
-                //        slice[line] = slice[line].Replace(incline.Value, newPart);
-                //    }
-                //}
                 cX = 0;
                 cY++;
             }

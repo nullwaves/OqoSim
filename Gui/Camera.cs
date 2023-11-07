@@ -1,4 +1,5 @@
 ﻿using OqoSim.Game;
+using System.Text.RegularExpressions;
 
 namespace OqoSim.Gui
 {
@@ -7,6 +8,8 @@ namespace OqoSim.Gui
         private Layer? _currentLayer;
 
         private ConsoleScreen _lastScreen = new(0, 0);
+
+        public Menu? Menu;
 
         public int Height { get; private set; }
         public int Width { get; private set; }
@@ -56,22 +59,26 @@ namespace OqoSim.Gui
             if (_lastScreen.Height != Height || _lastScreen.Width != Width || GetScreenDiffs(_lastScreen, screen).Count > 0 || forceRedraw)
             {
                 _lastScreen = screen;
-                var lines = screen.ToLines();
+                string cleaned = CleanInclines(screen.ToString());
                 Console.SetCursorPosition(0, 0);
-                Console.Write(screen);
+                Console.Write(cleaned);
             }
-            //else
-            //{
-            //    var diffs = GetScreenDiffs(_lastScreen, screen);
-            //    if (diffs.Count > Height * Width / 8)
-            //        Draw(true);
-            //    _lastScreen = screen;
-            //    foreach(var d in diffs)
-            //    {
-            //        Console.SetCursorPosition(d.Item2, d.Item1);
-            //        Console.Write(d.Item3);
-            //    }
-            //}
+        }
+
+        private static string CleanInclines(string screen)
+        {
+            var InclineGlyph = TileRenderer.InclineGlyph;
+            var inclineRegex = "(" + Regex.Escape(InclineGlyph + Colors.NORMAL) + "){3,}";
+            var inclines = Regex.Matches(screen, inclineRegex);
+            if (inclines is not null)
+            {
+                foreach (Match incline in inclines.OrderByDescending(x => x.Length))
+                {
+                    var newPart = $"{InclineGlyph}{new String(' ', (incline.Length / (InclineGlyph.Length + Colors.NORMAL.Length)) - 2)}{InclineGlyph + Colors.NORMAL}";
+                    screen = screen.Replace(incline.Value, newPart);
+                }
+            }
+            return screen;
         }
 
         public void Resize(int height, int width)
@@ -82,9 +89,17 @@ namespace OqoSim.Gui
 
         private ConsoleScreen RenderScreen()
         {
-            return _currentLayer is not null ?
+            var tiles = _currentLayer is not null ?
                 TileRenderer.Render(X, Y, Height, Width) :
                 throw new NullReferenceException("Camera has no active layer!");
+            if (Menu is not null)
+            {
+                ConsoleScreen menu = Menu.Render(Height, Width);
+                for (int y = 0; y < Math.Min(menu.Height, tiles.Height); y++)
+                    for (int x = 0; x < Math.Min(menu.Width, tiles.Width); x++)
+                        tiles.Pixels[y, x] = menu.Pixels[y, x].Length > 0 ? menu.Pixels[y, x] : tiles.Pixels[y, x];
+            }
+            return tiles;
         }
 
         private static List<(int, int, string)> GetScreenDiffs(ConsoleScreen oldScreen, ConsoleScreen newScreen)
