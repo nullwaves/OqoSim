@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using OqoSim.Gui;
+﻿using OqoSim.Gui;
 
 namespace OqoSim.Game
 {
@@ -22,11 +21,11 @@ namespace OqoSim.Game
 
         public Random Random { get; private set; } = new Random();
 
-        public GameManager(World? world) 
+        public GameManager(World? world)
         {
             World = world ?? new World();
             TileRenderer.AttachGM(this);
-            Camera = new Camera(Console.BufferHeight-1, Console.BufferWidth);
+            Camera = new Camera(Console.BufferHeight - 1, Console.BufferWidth);
             CurrentLayer = 0;
             UpdateCameraLayer();
             gameState = new DefaultState();
@@ -80,7 +79,7 @@ namespace OqoSim.Game
         {
             while (true)
             {
-                if(Console.KeyAvailable)
+                if (Console.KeyAvailable)
                 {
                     gameState.HandleInput(this, Console.ReadKey(true));
                 }

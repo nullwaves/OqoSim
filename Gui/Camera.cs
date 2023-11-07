@@ -6,7 +6,7 @@ namespace OqoSim.Gui
     {
         private Layer? _currentLayer;
 
-        private string[] _lastScreen = Array.Empty<string>();
+        private ConsoleScreen _lastScreen = new(0, 0);
 
         public int Height { get; private set; }
         public int Width { get; private set; }
@@ -38,7 +38,7 @@ namespace OqoSim.Gui
             _currentLayer = layer;
         }
 
-        public void SetPosition((int,int) position)
+        public void SetPosition((int, int) position)
         {
             X = position.Item1;
             Y = position.Item2;
@@ -46,35 +46,57 @@ namespace OqoSim.Gui
 
         public void Move(int xDelta = 0, int yDelta = 0)
         {
-            var newPos = (X+xDelta, Y+yDelta);
+            var newPos = (X + xDelta, Y + yDelta);
             SetPosition(newPos);
         }
 
         public void Draw(bool forceRedraw = false)
         {
             var screen = RenderScreen();
-            if (!_lastScreen.SequenceEqual(screen) || forceRedraw)
+            if (_lastScreen.Height != Height || _lastScreen.Width != Width || GetScreenDiffs(_lastScreen, screen).Count > 0 || forceRedraw)
             {
                 _lastScreen = screen;
-                Console.Clear();
-                foreach (var line in screen)
-                    Console.WriteLine(line);
+                var lines = screen.ToLines();
+                Console.SetCursorPosition(0, 0);
+                Console.Write(screen);
             }
+            //else
+            //{
+            //    var diffs = GetScreenDiffs(_lastScreen, screen);
+            //    if (diffs.Count > Height * Width / 8)
+            //        Draw(true);
+            //    _lastScreen = screen;
+            //    foreach(var d in diffs)
+            //    {
+            //        Console.SetCursorPosition(d.Item2, d.Item1);
+            //        Console.Write(d.Item3);
+            //    }
+            //}
         }
 
         public void Resize(int height, int width)
         {
             Width = width;
             Height = height;
-            X = X > GetMaxX() ? GetMaxX() : X;
-            Y = Y > GetMaxY() ? GetMaxY() : Y;
         }
 
-        private string[] RenderScreen()
+        private ConsoleScreen RenderScreen()
         {
             return _currentLayer is not null ?
-                TileRenderer.Render(_currentLayer, X, Y, Height, Width) : 
-                new string[] { "Camera not set to a layer. Render Fail."};
+                TileRenderer.Render(X, Y, Height, Width) :
+                throw new NullReferenceException("Camera has no active layer!");
+        }
+
+        private static List<(int, int, string)> GetScreenDiffs(ConsoleScreen oldScreen, ConsoleScreen newScreen)
+        {
+            var results = new List<(int, int, string)>();
+            var h = Math.Min(oldScreen.Height, newScreen.Height);
+            var w = Math.Min(oldScreen.Width, newScreen.Width);
+            for (int y = 0; y < h; y++)
+                for (int x = 0; x < w; x++)
+                    if (oldScreen.Pixels[y, x] != newScreen.Pixels[y, x])
+                        results.Add((y, x, newScreen.Pixels[y, x]));
+            return results;
         }
     }
 }

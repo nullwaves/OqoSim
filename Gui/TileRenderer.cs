@@ -1,12 +1,51 @@
 ﻿using OqoSim.Game;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace OqoSim.Gui
 {
+    public struct ConsoleScreen
+    {
+        public int Height { get; private set; }
+        public int Width { get; private set; }
+        public string[,] Pixels;
+
+        public ConsoleScreen(int height, int width)
+        {
+            Height = height;
+            Width = width;
+            Pixels = new string[height, width];
+            for (int y = 0; y < height; y++)
+                for (int x = 0; x < width; x++)
+                    Pixels[y, x] = " ";
+        }
+
+        public readonly string[] ToLines()
+        {
+            string[] lines = new string[Height];
+            for (int y = 0; y < Height; y++)
+                for (int x = 0; x < Width; x++)
+                    lines[y] += Pixels[y, x];
+            return lines;
+        }
+
+        public override readonly string ToString()
+        {
+            var lines = ToLines();
+            StringBuilder sb = new();
+            foreach (string line in lines)
+            {
+                sb.Append(line + Environment.NewLine);
+            }
+            return sb.ToString();
+        }
+    }
+
     internal class TileRenderer
     {
 
         public static readonly string InclineGlyph = Colors.GREEN + "^";
+        public static readonly string ActorGlyph = Colors.RED + "@";
 
         public static Dictionary<TileType, string> TileGlyphs = new()
         {
@@ -19,7 +58,8 @@ namespace OqoSim.Gui
 
         public static TileRenderer Instance = new();
 
-        private TileRenderer() {
+        private TileRenderer()
+        {
             // Console.OutputEncoding = Encoding.UTF8;
         }
 
@@ -38,41 +78,48 @@ namespace OqoSim.Gui
             return TileGlyphs[type] + Colors.NORMAL;
         }
 
-        public static string[] Render(Layer layer, int x0 = 0, int y0 = 0, int height = 0, int width = 0)
+        public static string RenderTileAtPos(int x, int y, int z)
         {
-            if (_game is null)
-                return new string[] { "TileRender not associated with a GameManager. Render Fail." };
-            height = height < 1 || y0 + height > layer.Size ? layer.Size-y0 : height;
-            width = width < 1 || x0 + width > layer.Size ? layer.Size-x0 : width;
-            var slice = new string[height];
-            int line = 0;
-            var inclineRegex = "(" + Regex.Escape(InclineGlyph + Colors.NORMAL) + "){3,}";
-            var actors = _game.World.GetActorsOnLayer(_game.CurrentLayer);
-            for (int y = y0; y < y0+height; y++)
+            if (_game is null) throw new NullReferenceException("GameManager not set in TileRenderer");
+            if (y < 0 || x < 0 || y >= _game.World.Size || x >= _game.World.Size)
             {
-                for (int x = x0; x < x0+width; x++)
+                return " ";
+            }
+            if (_game.World.TileIsCovered(x, y, z))
+                return InclineGlyph + Colors.NORMAL;
+            if (_game.World.TileIsSubmerged(x, y, z))
+                return GetGlyph(TileType.Water);
+            if (_game.World.Actors.Where(a => a.X == x && a.Y == y && a.Z == z).Any())
+                return ActorGlyph + Colors.NORMAL;
+            return GetGlyph(_game.World.GetTileAtPos(x, y, z));
+        }
+
+        public static ConsoleScreen Render(int x0 = 0, int y0 = 0, int height = 0, int width = 0)
+        {
+            if (_game is null) throw new NullReferenceException("GameManager not set in TileRenderer");
+            var slice = new ConsoleScreen(height, width);
+            //var inclineRegex = "(" + Regex.Escape(InclineGlyph + Colors.NORMAL) + "){3,}";
+            //var actors = _game.World.GetActorsOnLayer(_game.CurrentLayer);
+            int cY = 0;
+            int cX = 0;
+            for (int y = y0; y < y0 + height; y++)
+            {
+                for (int x = x0; x < x0 + width; x++)
                 {
-                    if (y < 0 || x < 0 || y >= layer.Size || x >= layer.Size)
-                    {
-                        slice[line] += " ";
-                    }
-                    else
-                    {
-                        var glyph = _game.World.TileIsCovered(x, y, _game.CurrentLayer) ? InclineGlyph + Colors.NORMAL :
-                            _game.World.TileIsSubmerged(x, y, _game.CurrentLayer) ? GetGlyph(TileType.Water) : actors.Where(a => a.X == x && a.Y == y).Any() ? Colors.RED + "@" + Colors.NORMAL: GetGlyph(layer.Tiles[x, y]);
-                        slice[line] += glyph;
-                    }
+                    slice.Pixels[cY, cX] = RenderTileAtPos(x, y, _game.CurrentLayer);
+                    cX++;
                 }
-                var inclines = Regex.Matches(slice[line], inclineRegex);
-                if (inclines is not null)
-                {
-                    foreach (Match incline in inclines.OrderByDescending(x => x.Length))
-                    {
-                        var newPart = $"{InclineGlyph}{new String(' ', (incline.Length/(InclineGlyph.Length+Colors.NORMAL.Length))-2)}{InclineGlyph + Colors.NORMAL}";
-                        slice[line] = slice[line].Replace(incline.Value, newPart);
-                    }
-                }
-                line++;
+                //var inclines = Regex.Matches(slice[line], inclineRegex);
+                //if (inclines is not null)
+                //{
+                //    foreach (Match incline in inclines.OrderByDescending(x => x.Length))
+                //    {
+                //        var newPart = $"{InclineGlyph}{new String(' ', (incline.Length/(InclineGlyph.Length+Colors.NORMAL.Length))-2)}{InclineGlyph + Colors.NORMAL}";
+                //        slice[line] = slice[line].Replace(incline.Value, newPart);
+                //    }
+                //}
+                cX = 0;
+                cY++;
             }
             return slice;
         }

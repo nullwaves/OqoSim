@@ -18,7 +18,7 @@
             Layers = new Dictionary<int, Layer>();
             for (int z = -halfHeight; z <= halfHeight; z++)
             {
-                Console.WriteLine($"Populating Z: {z}");
+                if (z % 5 == 0) Console.WriteLine($"Populating Z: {z}");
                 TileType mat = z > 0 ? TileType.Air : TileType.Ground; // 0 is "sea level"
                 Layers.Add(z, new Layer(width, mat));
             }
@@ -49,8 +49,8 @@
 
         public Tile GetTileAtPos(int x, int y, int z) => Layers[z].Tiles[x, y];
         public Tile GetTileAbove(int x, int y, int z) => GetTileAtPos(x, y, z + 1);
-        public bool TileIsCovered(int x, int y, int z) => GetTileAbove(x,y,z).Type == TileType.Ground;
-        public bool TileIsSubmerged(int x, int y, int z) => GetTileAbove(x,y,z).Type == TileType.Water;
+        public bool TileIsCovered(int x, int y, int z) => GetTileAbove(x, y, z).Type == TileType.Ground;
+        public bool TileIsSubmerged(int x, int y, int z) => GetTileAbove(x, y, z).Type == TileType.Water;
 
         public List<IActor> GetActorsOnLayer(int z) => Actors.Where(a => a.Z == z).ToList();
     }

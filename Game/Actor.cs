@@ -12,9 +12,23 @@
 
     public abstract partial class BaseActor : IActor
     {
-        public int X { get; set; } = 0;
-        public int Y { get; set; } = 0;
-        public int Z { get; set; } = 0;
+        public Vector3i Position = new(0, 0, 0);
+
+        public int X
+        {
+            get { return Position.X; }
+            set { Position.X = value; }
+        }
+        public int Y
+        {
+            get { return Position.Y; }
+            set { Position.Y = value; }
+        }
+        public int Z
+        {
+            get { return Position.Z; }
+            set { Position.Z = value; }
+        }
 
         public abstract string ActorType { get; }
 
@@ -22,10 +36,10 @@
 
         public List<(int, int, int)> GetAcceptableMovePositions(GameManager game)
         {
-            List<(int,int,int)> results = new();
-            for (int z = -1; z <= 1;  z++)
+            List<(int, int, int)> results = new();
+            for (int z = -1; z <= 1; z++)
             {
-                for(int x = -1; x <= 1; x++)
+                for (int x = -1; x <= 1; x++)
                 {
                     for (int y = -1; y <= 1; y++)
                     {
@@ -36,7 +50,7 @@
                         if (t.Type == TileType.Ground &&
                             !game.World.TileIsCovered(nX, nY, nZ) &&
                             !game.World.TileIsSubmerged(nX, nY, nZ))
-                            results.Add((nX,nY,nZ));
+                            results.Add((nX, nY, nZ));
                     }
                 }
             }
