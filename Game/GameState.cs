@@ -31,7 +31,7 @@ namespace OqoSim.Game
                     Title = "Paused",
                     Items = new List<MenuItem> { new MenuItem() { Title = "Esc - Resume" }, new MenuItem() { Title = "Ctrl+C - Quit" } },
                     Top = game.Camera.Height / 2,
-                    Left = game.Camera.Width/ 2,
+                    Left = game.Camera.Width / 2,
                 };
                 game.SetState(new PausedState());
             }
@@ -74,6 +74,24 @@ namespace OqoSim.Game
                 game.SimulationSpeed++;
             else if (key.Key == ConsoleKey.Z)
                 game.SimulationSpeed--;
+            else if (key.Key == ConsoleKey.F1)
+            {
+                game.Camera.Menu = game.Camera.Menu is null ? new Menu()
+                {
+                    Border = ".",
+                    Title = "Help",
+                    Items = new List<MenuItem> {
+                        new MenuItem() { Title = "F1        - Help" },
+                        new MenuItem() { Title = "Esc       - Pause"},
+                        new MenuItem() { Title = "W/A/S/D   - Move Camera"},
+                        new MenuItem() { Title = "E/C       - Ascend/Descend"},
+                        new MenuItem() { Title = "G         - Place Actor" },
+                        new MenuItem() { Title = "Q/Z       - Increase/Decrease Sim Speed"},
+                        new MenuItem() { Title = "Ctrl+C    - Quit" } },
+                    Top = 4,
+                    Left = 8,
+                } : null ;
+            }
         }
     }
 

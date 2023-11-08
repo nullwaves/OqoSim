@@ -1,10 +1,12 @@
-﻿namespace OqoSim.Game
+﻿using System.Collections.Concurrent;
+
+namespace OqoSim.Game
 {
     public class World
     {
-        public List<IActor> Actors { get; set; }
+        public ConcurrentBag<IActor> Actors { get; set; }
         public Dictionary<int, Layer> Layers { get; set; }
-        public int Size { get; private set; }
+        public int Size { get; set; }
 
         /// <summary>
         /// Instantiate a world with specified size.
@@ -14,7 +16,7 @@
         {
             Size = width;
             var halfHeight = height / 2;
-            Actors = new List<IActor>();
+            Actors = new();
             Layers = new Dictionary<int, Layer>();
             for (int z = -halfHeight; z <= halfHeight; z++)
             {

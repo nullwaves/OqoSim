@@ -50,7 +50,7 @@ namespace OqoSim.Gui
                 return InclineGlyph + Colors.NORMAL;
             if (_game.World.TileIsSubmerged(x, y, z))
                 return GetGlyph(TileType.Water);
-            if (_game.World.Actors.Where(a => a.X == x && a.Y == y && a.Z == z).Any())
+            if (_game.World.Actors.Where(a => a is not null).Where(a => a.X == x && a.Y == y && a.Z == z).Any())
                 return ActorGlyph + Colors.NORMAL;
             return GetGlyph(_game.World.GetTileAtPos(x, y, z));
         }

@@ -1,9 +1,5 @@
-﻿// See https://aka.ms/new-console-template for more information
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using OqoSim.Game;
-
-//Application.Run<MainMenu>();
-//Application.Shutdown();
 
 World? world;
 
@@ -11,12 +7,12 @@ if (!File.Exists("world.oqo"))
 {
 
     Console.WriteLine("Creating World...");
-    world = new World(200, 500);
+    world = new World(40, 500);
 }
 else 
 {
     Console.WriteLine("Loading existing world...");
-    world = JsonConvert.DeserializeObject<World>(File.ReadAllText("world.oqo"));
+    world = JsonConvert.DeserializeObject<World>(File.ReadAllText("world.oqo"), new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Objects });
 }
 
 Console.WriteLine("Done.");
