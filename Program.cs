@@ -1,18 +1,14 @@
-﻿using Newtonsoft.Json;
-using OqoSim.Game;
+﻿using OqoSim.Game;
+using OqoSim.IO;
 
-World? world;
+World? world = WorldFileManager.LoadWorldFromFile("world.oqo");
 
-if (!File.Exists("world.oqo"))
+if (world is null)
 {
-
+    Console.WriteLine("Press any key to continue...");
+    Console.ReadKey();
     Console.WriteLine("Creating World...");
     world = new World(40, 500);
-}
-else
-{
-    Console.WriteLine("Loading existing world...");
-    world = JsonConvert.DeserializeObject<World>(File.ReadAllText("world.oqo"), new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Objects });
 }
 
 Console.WriteLine("Done.");

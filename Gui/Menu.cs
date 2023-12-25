@@ -48,6 +48,11 @@
     public class MenuItem
     {
         public string Title { get; set; } = "MenuItem";
+
+        public MenuItem(string? title = null)
+        {
+            Title = title is not null ? title : string.Empty;
+        }
     }
 
 }

@@ -1,4 +1,5 @@
-﻿using OqoSim.Gui;
+﻿using OqoSim.Game.States;
+using OqoSim.Gui;
 
 namespace OqoSim.Game
 {
