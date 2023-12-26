@@ -1,4 +1,5 @@
 ﻿using OqoSim.Game;
+using OqoSim.Game.Generators;
 using OqoSim.IO;
 
 World? world = WorldFileManager.LoadWorldFromFile("world.oqo");
@@ -7,8 +8,10 @@ if (world is null)
 {
     Console.WriteLine("Press any key to continue...");
     Console.ReadKey();
+    Console.Write("World Seed: ");
+    string input = Console.ReadLine();
     Console.WriteLine("Creating World...");
-    world = new World(40, 500);
+    world = PerlinWorldGenerator.Generate(input.GetHashCode(), 40, 40, 500);
 }
 
 Console.WriteLine("Done.");
