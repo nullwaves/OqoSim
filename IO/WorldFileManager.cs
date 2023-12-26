@@ -1,11 +1,13 @@
 ﻿using Newtonsoft.Json;
 using OqoSim.Game;
+using System.IO.Compression;
 
 namespace OqoSim.IO
 {
     public static class WorldFileManager
     {
         public static JsonSerializerSettings JsonSerializerSettings => new() { TypeNameHandling = TypeNameHandling.Objects };
+        public static JsonSerializer Serializer => JsonSerializer.Create(JsonSerializerSettings);
 
         public static World? LoadWorldFromFile(string filename)
         {
@@ -14,7 +16,12 @@ namespace OqoSim.IO
             try
             {
                 Console.WriteLine($"Loading world from {filename}...");
-                world = JsonConvert.DeserializeObject<World>(File.ReadAllText(filename), JsonSerializerSettings);
+                using FileStream fs = new(filename, FileMode.Open);
+                using GZipStream gs = new(fs, CompressionMode.Decompress);
+                using StreamReader sr = new(gs);
+                var savestring = sr.ReadToEnd();
+                return JsonConvert.DeserializeObject<World>(savestring);
+                // world = JsonConvert.DeserializeObject<World>(File.ReadAllText(filename), JsonSerializerSettings);
             }
             catch(Exception ex)
             {
@@ -25,18 +32,24 @@ namespace OqoSim.IO
 
         public static bool SaveWorldToFile(World world, string filename)
         {
-            bool success = false;
             Console.WriteLine("Beginning save...");
             try
             {
-                File.WriteAllText(filename, JsonConvert.SerializeObject(world, typeof(World), JsonSerializerSettings));
-                success = true;
+                Console.WriteLine("Serializing...");
+                string jstring = JsonConvert.SerializeObject(world, JsonSerializerSettings);
+                Console.WriteLine("Opening Streams...");
+                using FileStream fs = new(filename, FileMode.OpenOrCreate);
+                using GZipStream gs = new(fs, CompressionMode.Compress);
+                using StreamWriter sw = new(gs);
+                Console.WriteLine("Writing Save...");
+                sw.Write(jstring);
+                return true;
             }
             catch (Exception ex)
             {
                 Console.Write(Gui.Colors.RED + Gui.Colors.BG_WHITE + ex.Message + Gui.Colors.NORMAL);
             }
-            return success;
+            return false;
         }
     }
 }

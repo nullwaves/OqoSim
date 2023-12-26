@@ -1,4 +1,5 @@
 ﻿using OqoSim.IO;
+using System.Runtime.InteropServices;
 
 namespace OqoSim.Game.States
 {
@@ -20,13 +21,19 @@ namespace OqoSim.Game.States
                 game.SetState(new DefaultState());
                 game.Camera.Draw(true);
             }
-            else if (key.Key == ConsoleKey.S)
+            else if (key.Key == ConsoleKey.S && key.Modifiers.HasFlag(ConsoleModifiers.Control))
             {
-                if (key.Modifiers.HasFlag(ConsoleModifiers.Control))
-                {
-                    var success = WorldFileManager.SaveWorldToFile(game.World, "world.oqo");
-                    Console.WriteLine($"World saved: {success}");
-                }
+                var success = WorldFileManager.SaveWorldToFile(game.World, "world.oqo");
+                Console.WriteLine($"World saved: {success}");
+            }
+            else if (key.Key == ConsoleKey.F2 && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                var path = $"render/{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.png";
+                if (!Directory.Exists("render/")) Directory.CreateDirectory("render/");
+                Console.WriteLine($"Rendering to \"{path}\"");
+                //if (!File.Exists("render/")) File.Create("render/");
+                ImageFileManager.RenderWorldToPNG(game.World, path);
+                Console.Beep();
             }
         }
     }
