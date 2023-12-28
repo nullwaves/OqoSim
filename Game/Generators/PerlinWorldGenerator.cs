@@ -1,4 +1,6 @@
-﻿namespace OqoSim.Game.Generators
+﻿using OqoSim.Utils;
+
+namespace OqoSim.Game.Generators
 {
     class PerlinWorldGenerator : IWorldGenerator
     {
@@ -6,7 +8,7 @@
 
         public static World Generate(int seed, int layersBelowZero, int layersAboveZero, int width)
         {
-            World world = new()
+            World world = new(seed)
             {
                 Size = width
             };

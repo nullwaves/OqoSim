@@ -94,6 +94,7 @@ namespace OqoSim.Game
 
         internal void SetState(IGameState state)
         {
+            state.Start(this);
             gameState = state;
         }
 

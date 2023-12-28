@@ -9,9 +9,9 @@ if (world is null)
     Console.WriteLine("Press any key to continue...");
     Console.ReadKey();
     Console.Write("World Seed: ");
-    string input = Console.ReadLine();
+    string? input = Console.ReadLine();
     Console.WriteLine("Creating World...");
-    world = PerlinWorldGenerator.Generate(input.GetHashCode(), 40, 40, 500);
+    world = PerlinWorldGenerator.Generate(input is not null ? input.GetHashCode() : 1337, 40, 40, 500);
 }
 
 Console.WriteLine("Done.");

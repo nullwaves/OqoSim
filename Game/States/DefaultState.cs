@@ -6,6 +6,11 @@ namespace OqoSim.Game.States
     {
         public string Name => "Default";
 
+        public void Start(GameManager game)
+        {
+            // Maybe load hud or something.
+        }
+
         public void Update(GameManager game)
         {
             //game.Tick();
@@ -16,21 +21,6 @@ namespace OqoSim.Game.States
         {
             if (key.Key == ConsoleKey.Escape)
             {
-                game.SetPaused();
-                game.Camera.Menu = new Menu()
-                {
-                    Border = Colors.BLUE + "#" + Colors.NORMAL,
-                    Title = "Paused",
-                    Items = new List<MenuItem> {
-                        new("Esc    - Resume"),
-                        new("Ctrl+S - Save"),
-                        new("F2     - Render"),
-                        new("---------------"),
-                        new("Ctrl+C - Quit"),
-                        },
-                    Top = game.Camera.Height / 2,
-                    Left = game.Camera.Width / 2,
-                };
                 game.SetState(new PausedState());
             }
             else if (key.Key == ConsoleKey.W)

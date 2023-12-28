@@ -1,4 +1,5 @@
-﻿using OqoSim.IO;
+﻿using OqoSim.Gui;
+using OqoSim.IO;
 using System.Runtime.InteropServices;
 
 namespace OqoSim.Game.States
@@ -6,6 +7,26 @@ namespace OqoSim.Game.States
     internal class PausedState : IGameState
     {
         public string Name => "Paused";
+
+        public void Start(GameManager game)
+        {
+            game.SetPaused();
+            game.Camera.Menu = new Menu()
+            {
+                Border = Colors.BLUE + "#" + Colors.NORMAL,
+                Title = "Paused",
+                Items = new List<MenuItem> {
+                        new("Esc    - Resume"),
+                        new("Ctrl+S - Save"),
+                        new("F2     - Render"),
+                        new("---------------"),
+                        new("Ctrl+C - Quit"),
+                        },
+                Top = game.Camera.Height / 2,
+                Left = game.Camera.Width / 2,
+            };
+        }
+
         public void Update(GameManager game)
         {
             game.Camera.Draw();
