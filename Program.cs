@@ -1,8 +1,8 @@
-﻿using OqoSim.Game;
-using OqoSim.Game.Generators;
-using OqoSim.IO;
+﻿using ksim.Game;
+using ksim.Game.Generators;
+using ksim.IO;
 
-World? world = WorldFileManager.LoadWorldFromFile("world.oqo");
+World? world = WorldFileManager.LoadWorldFromFile("world.ksim");
 
 if (world is null)
 {
@@ -24,7 +24,7 @@ gm.Start();
 while (true)
 {
     gm.Update();
-    Console.Title = $"Oqo - X:{gm.Camera.X} Y:{gm.Camera.Y} Z:{gm.CurrentLayer} - {gm.State}";
+    Console.Title = $"kSim - X:{gm.Camera.X} Y:{gm.Camera.Y} Z:{gm.CurrentLayer} - {gm.State}";
     if (Console.BufferHeight - 1 != gm.Camera.Height || Console.BufferWidth != gm.Camera.Width)
         gm.Camera.Resize(Console.BufferHeight - 1, Console.BufferWidth);
     Thread.Sleep(50);

@@ -1,6 +1,6 @@
-﻿using OqoSim.Game;
+﻿using ksim.Game;
 
-namespace OqoSim.Gui
+namespace ksim.Gui
 {
     internal class TileRenderer
     {

@@ -12,10 +12,4 @@
     <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="oqocs">
-      <HintPath>..\..\..\repos\oqocs\oqocs\bin\Debug\netstandard2.0\oqocs.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

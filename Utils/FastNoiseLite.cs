@@ -55,7 +55,7 @@ using System.Runtime.CompilerServices;
 using FNLfloat = System.Single;
 //using FNLfloat = System.Double;
 
-namespace OqoSim.Utils
+namespace ksim.Utils
 {
     public class FastNoiseLite
     {

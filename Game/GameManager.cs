@@ -1,7 +1,7 @@
-﻿using OqoSim.Game.States;
-using OqoSim.Gui;
+﻿using ksim.Game.States;
+using ksim.Gui;
 
-namespace OqoSim.Game
+namespace ksim.Game
 {
     public class GameManager
     {

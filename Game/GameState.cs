@@ -1,4 +1,4 @@
-﻿namespace OqoSim.Game
+﻿namespace ksim.Game
 {
     internal interface IGameState
     {

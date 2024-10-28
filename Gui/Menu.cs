@@ -1,4 +1,4 @@
-﻿namespace OqoSim.Gui
+﻿namespace ksim.Gui
 {
     public class Menu
     {

@@ -1,4 +1,4 @@
-﻿namespace OqoSim.Game
+﻿namespace ksim.Game
 {
     public struct Vector3i
     {

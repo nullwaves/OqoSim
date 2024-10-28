@@ -1,4 +1,4 @@
-﻿namespace OqoSim.Game.Generators
+﻿namespace ksim.Game.Generators
 {
     public interface IWorldGenerator
     {

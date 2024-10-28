@@ -1,6 +1,6 @@
-﻿using OqoSim.Gui;
+﻿using ksim.Gui;
 
-namespace OqoSim.Game.States
+namespace ksim.Game.States
 {
     internal class DefaultState : IGameState
     {

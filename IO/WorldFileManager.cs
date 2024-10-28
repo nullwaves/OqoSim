@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
-using OqoSim.Game;
+using ksim.Game;
 using System.IO.Compression;
 
-namespace OqoSim.IO
+namespace ksim.IO
 {
     public static class WorldFileManager
     {

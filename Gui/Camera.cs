@@ -1,7 +1,7 @@
-﻿using OqoSim.Game;
+﻿using ksim.Game;
 using System.Text.RegularExpressions;
 
-namespace OqoSim.Gui
+namespace ksim.Gui
 {
     public class Camera
     {

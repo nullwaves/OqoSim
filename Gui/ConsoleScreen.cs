@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace OqoSim.Gui
+namespace ksim.Gui
 {
     public struct ConsoleScreen
     {

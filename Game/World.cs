@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 
-namespace OqoSim.Game
+namespace ksim.Game
 {
     public class World
     {

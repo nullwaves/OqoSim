@@ -1,6 +1,6 @@
-﻿using OqoSim.Utils;
+﻿using ksim.Utils;
 
-namespace OqoSim.Game.Generators
+namespace ksim.Game.Generators
 {
     class PerlinWorldGenerator : IWorldGenerator
     {

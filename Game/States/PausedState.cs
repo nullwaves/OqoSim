@@ -1,8 +1,8 @@
-﻿using OqoSim.Gui;
-using OqoSim.IO;
+﻿using ksim.Gui;
+using ksim.IO;
 using System.Runtime.InteropServices;
 
-namespace OqoSim.Game.States
+namespace ksim.Game.States
 {
     internal class PausedState : IGameState
     {
@@ -44,7 +44,7 @@ namespace OqoSim.Game.States
             }
             else if (key.Key == ConsoleKey.S && key.Modifiers.HasFlag(ConsoleModifiers.Control))
             {
-                var success = WorldFileManager.SaveWorldToFile(game.World, "world.oqo");
+                var success = WorldFileManager.SaveWorldToFile(game.World, "world.ksim");
                 Console.WriteLine($"World saved: {success}");
             }
             else if (key.Key == ConsoleKey.F2 && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))

@@ -1,8 +1,8 @@
-﻿using OqoSim.Game;
+﻿using ksim.Game;
 using System.Drawing.Imaging;
 using System.Drawing;
 
-namespace OqoSim.IO
+namespace ksim.IO
 {
     public static class ImageFileManager
     {
